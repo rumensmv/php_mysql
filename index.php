@@ -1,45 +1,35 @@
+<?php
+include 'variables.php';
+include 'functions.php';
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
         <title>Mon site de recettes</title>
+        <link rel="stylesheet" href="style.css">
     </head>
- 
+
     <body>
- 
-    <!-- L'en-tête -->
-    
-    <header>
-        <!-- Le menu -->
-    
-        <nav id="menu">        
-            <div class="element_menu">
-                <h3>Titre menu</h3>
-                <ul>
-                    <li><a href="page1.html">Lien</a></li>
-                    <li><a href="page2.html">Lien</a></li>
-                    <li><a href="page3.html">Lien</a></li>
-                </ul>
-            </div>    
-        </nav>
-       
-    </header>
-    
-    <!-- Le corps -->
-    
-    <div id="corps">
-        <h1>Mon site de recettes</h1>
-                
-            <p>
-                Bienvenue sur mon site de recettes !
-            </p>
+
+        <!-- L'en-tête -->
+        <?php include 'header.php'; ?>
+
+        <!-- Le corps -->
+        <div id="corps">
+            <h1>Liste des recettes</h1>
+            <?php foreach(getValidRecipes($recipes) as $recipe): ?>
+                <article>
+                    <h3><?php echo $recipe['title']; ?></h3>
+                    <div><?php echo !empty($recipe['recipe']) ? $recipe['recipe'] : 'Recette non disponible'; ?></div>
+                    <i><?php echo displayAuthor($recipe['author'], $users); ?></i>
+                </article>
+            <?php endforeach; ?>
         </div>
-    
-    <!-- Le pied de page -->
-    
-    <footer id="pied_de_page">
-        <p>Copyright moi, tous droits réservés</p>
-    </footer>
-    
+
+        <!-- Le pied de page -->
+        <?php include 'footer.php'; ?>
+
     </body>
 </html>
