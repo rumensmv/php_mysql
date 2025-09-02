@@ -1,11 +1,25 @@
 <?php
-
-// Déclaration du tableau des recettes
+// Déclaration du tableau des recettes en tableaux associatifs
 $recipes = [
-    ['Cassoulet', 'Mettez les haricots, la viande et laissez mijoter...', 'mickael.andrieu@exemple.com', true],
-    ['Couscous', 'Préparez la semoule, les légumes et la viande...', 'mickael.andrieu@exemple.com', false],
+    [
+        'title' => 'Cassoulet',
+        'recipe' => ' ',
+        'author' => 'mickael.andrieu@exemple.com',
+        'enabled' => true,
+    ],
+    [
+        'title' => 'Couscous',
+        'recipe' => ' ',
+        'author' => 'mickael.andrieu@exemple.com',
+        'enabled' => false,
+    ],
+    [
+        'title' => 'Escalope milanaise',
+        'recipe' => ' ',
+        'author' => 'mathieu.nebra@exemple.com',
+        'enabled' => true,
+    ]
 ];
-
 ?>
 
 <!DOCTYPE html>
@@ -13,15 +27,20 @@ $recipes = [
 <head>
     <meta charset="UTF-8">
     <title>Affichage des recettes</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Liste des recettes</h1>
+    <h1>Affichage des recettes</h1>
     <ul>
-        <?php for ($lines = 0; $lines <= 1; $lines++): ?>
-            <li>
-                <?php echo $recipes[$lines][0] . ' (Auteur : ' . $recipes[$lines][2] . ')'; ?>
-            </li>
-        <?php endfor; ?>
+        <?php foreach($recipes as $recipe): ?>
+            <?php if($recipe['enabled']): ?>
+                <li>
+                    <div class="title"><?php echo $recipe['title']; ?></div>
+                    <div class="author">Auteur : <?php echo $recipe['author']; ?></div>
+                    <div><?php echo $recipe['recipe']; ?></div>
+                </li>
+            <?php endif; ?>
+        <?php endforeach; ?>
     </ul>
 </body>
 </html>
