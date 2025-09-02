@@ -1,25 +1,28 @@
 <?php
-// Déclaration du tableau des recettes en tableaux associatifs
-$recipes = [
-    [
-        'title' => 'Cassoulet',
-        'recipe' => ' ',
-        'author' => 'mickael.andrieu@exemple.com',
-        'enabled' => true,
-    ],
-    [
-        'title' => 'Couscous',
-        'recipe' => ' ',
-        'author' => 'mickael.andrieu@exemple.com',
-        'enabled' => false,
-    ],
-    [
-        'title' => 'Escalope milanaise',
-        'recipe' => ' ',
-        'author' => 'mathieu.nebra@exemple.com',
-        'enabled' => true,
-    ]
-];
+include 'recettes.php';
+
+function isValidRecipe(array $recipe) : bool {
+    return isset($recipe['is_enabled']) && $recipe['is_enabled'];
+}
+
+function getRecipes(array $recipes) : array {
+    $validRecipes = [];
+    foreach($recipes as $recipe) {
+        if (isValidRecipe($recipe)) {
+            $validRecipes[] = $recipe;
+        }
+    }
+    return $validRecipes;
+}
+
+function displayAuthor(string $authorEmail, array $users) : string {
+    foreach($users as $user) {
+        if ($user['email'] === $authorEmail) {
+            return $user['full_name'] . ' (' . $user['age'] . ' ans)';
+        }
+    }
+    return "Auteur inconnu";
+}
 ?>
 
 <!DOCTYPE html>
@@ -32,14 +35,12 @@ $recipes = [
 <body>
     <h1>Affichage des recettes</h1>
     <ul>
-        <?php foreach($recipes as $recipe): ?>
-            <?php if($recipe['enabled']): ?>
-                <li>
-                    <div class="title"><?php echo $recipe['title']; ?></div>
-                    <div class="author">Auteur : <?php echo $recipe['author']; ?></div>
-                    <div><?php echo $recipe['recipe']; ?></div>
-                </li>
-            <?php endif; ?>
+        <?php foreach(getRecipes($recipes) as $recipe): ?>
+            <li>
+                <div class="title"><?php echo $recipe['title']; ?></div>
+                <div class="author">Auteur : <?php echo displayAuthor($recipe['author'], $users); ?></div>
+                <div class="recipe-text"><?php echo !empty($recipe['recipe']) ? $recipe['recipe'] : 'Recette non disponible'; ?></div>
+            </li>
         <?php endforeach; ?>
     </ul>
 </body>
