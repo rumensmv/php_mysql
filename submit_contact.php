@@ -14,6 +14,14 @@
     <div class="container">
         <?php include_once('header.php'); ?>
 
+        <?php
+        // Vérification de la présence des paramètres 'email' et 'message'
+        if (!isset($_GET['email']) || !isset($_GET['message'])) {
+            echo '<h1>Il faut un email et un message pour soumettre le formulaire.</h1>';
+            return; // Arrête l'exécution du reste du script
+        }
+        ?>
+
         <h1>Message bien reçu !</h1>
 
         <div class="card">
