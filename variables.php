@@ -1,4 +1,5 @@
 <?php
+// variables.php
 
 $users = [
     [
@@ -44,5 +45,3 @@ $recipes = [
         'is_enabled' => false,
     ],
 ];
-
-?>
