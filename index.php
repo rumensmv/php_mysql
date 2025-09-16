@@ -1,3 +1,21 @@
+<?php 
+session_start();
+
+include_once('variables.php');
+include_once('functions.php');
+
+if (isset($_GET['logout'])){
+    session_destroy();
+    unset($_SESSION['LOGGED_USER']);
+    header('Location: index.php');
+    exit;
+}
+
+if (isset($_SESSION['LOGGED_USER'])){
+    $loggedUser = ['email' => $_SESSION['LOGGED_USER'] ];
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,12 +34,6 @@
     <!-- Navigation -->
     <?php include_once('header.php'); ?>
 
-    <!-- Inclusion des fichiers utilitaires -->
-    <?php
-    include_once('variables.php');
-    include_once('functions.php');
-    ?>
-
     <!-- Inclusion du formulaire de connexion -->
     <?php include_once('login.php'); ?>
 
@@ -36,6 +48,9 @@
                 <i><?php echo displayAuthor($recipe['author'], $users); ?> </i>
             </article>
         <?php endforeach ?>
+        <p>
+            <a href="index.php?logout=1" class="btn btn-danger">Se deconnecter</a>
+        </p>
     <?php endif; ?>
 </div>
 
