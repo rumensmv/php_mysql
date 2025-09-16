@@ -4,6 +4,9 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
     foreach ($users as $user) {
         if ($user['email']=== $_POST['email'] && $user['password'] === $_POST['password']) {
             $loggedUser = [ 'email' => $user['email'], ];
+
+            setcookie('LOGGED_USER', $user['email'], time()+365*24*3600, "/", "", true, true);
+
         }
         else {
             $errorMessage = sprintf(
@@ -13,6 +16,10 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
             );
         }
     }
+}
+
+if (isset($_COOKIE['LOGGED_USER'])){
+    $loggedUser = ['email' => $_COOKIE['LOGGED_USER']];
 }
 ?>
 
