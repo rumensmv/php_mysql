@@ -1,6 +1,7 @@
 <?php 
 session_start();
 
+
 include_once('variables.php');
 include_once('functions.php');
 
@@ -17,14 +18,56 @@ if (isset($_SESSION['LOGGED_USER'])){
 ?>
 
 <!-- On se connecte à MySQL -->
-<?php include_once('mysql.php'); ?>
+<?php include_once('mysql.php'); 
+
+$message = '';
+
+if ($loggedUser && $_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $title = trim($_POST['title'] ?? '');
+    $recipeContent = trim($_POST['recipe'] ?? '');
+    $is_enabled = isset($_POST['is_enabled']) ? 1 : 0;
+    $author = $loggedUser['email'];
+
+    if ($title !== '' && $recipeContent !== '') {
+        $sqlInsert = 'INSERT INTO recipes(title, recipe, author, is_enabled) 
+                      VALUES (:title, :recipe, :author, :is_enabled)';
+        $stmt = $db->prepare($sqlInsert);
+        $stmt->execute([
+            'title' => $title,
+            'recipe' => $recipeContent,
+            'author' => $author,
+            'is_enabled' => $is_enabled
+        ]);
+        $message = "Recette ajoutée avec succès !";
+    } else {
+        $message = "Veuillez remplir tous les champs.";
+    }
+}
+
+$recipes = [];
+if ($loggedUser) {
+
+    $sqlQuery = 'SELECT * FROM recipes WHERE author = :author AND is_enabled = :is_enabled';
+    $stmt = $db->prepare($sqlQuery);
+    $stmt->execute([
+        'author' => $loggedUser['email'],
+        'is_enabled' => 1
+    ]);
+    $recipes = $stmt->fetchAll();
+}
+?>
 
 <!-- Si tout va bien, on peut continuer -->
+
 <?php
 // On récupère tout le contenu de la table recipes
-$sqlQuery = 'SELECT * FROM recipes WHERE is_enabled = 1';
+$sqlQuery = 'SELECT * FROM recipes WHERE author = :author AND is_enabled = :is_enabled';
 $recipesStatement = $db->prepare($sqlQuery);
-$recipesStatement->execute();
+$recipesStatement->execute([
+    'author' => $loggedUser['email'],
+    'is_enabled' => true,
+]);
 $recipes = $recipesStatement->fetchAll();
 ?>
 
